@@ -1,0 +1,32 @@
+{% extends "hello/layout.html" %}
+{% block title %}
+    Home
+{% endblock %}
+{% block content %}
+    <h2>Logged Workouts</h2>
+
+    {% if workout_list %}
+        <table class="workout_list">
+            <thead>
+            <tr>
+                <th>Date</th>
+                <th>Start Time</th>
+                <th>End Time</th>
+                <th>Length</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for workout in workout_list %}
+                <tr>
+                    <td>{{ workout.date | date }}</td>
+                    <td>{{ workout.time_start | time:'H:i:s' }}</td>
+                    <td>{{ workout.time_end | time:'H:i:s' }}</td>
+                    <td>{{ workout.length }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>No workouts have been logged. Use the <a href="{% url 'exercise' %}">Log workout form</a>.</p>
+    {% endif %}
+{% endblock %}
