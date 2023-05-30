@@ -11,4 +11,33 @@
     <form method="POST" class="log-form">
         {% csrf_token %}
         <button type="submit" class="save btn btn-default" name="end">End Workout</button>
-    </form>{% endblock %}
+    </form>
+
+    <h2>Current Workout</h2>
+
+    {% if exercise_list %}
+        <table class="exercise_list">
+            <thead>
+            <tr>
+                <th>Workout</th>
+                <th>Name</th>
+                <th>Reps</th>
+                <th>Details</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for exercise in exercise_list %}
+                <tr>
+                    <td>{{ exercise.id }}</td>
+                    <td>{{ exercise.get_exercise_display }}</td>
+                    <td>{{ exercise.reps }}</td>
+                    <td>{{ exercise.details }}</td>
+
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>No exercises have been logged yet for this workout.</a></p>
+    {% endif %}
+{% endblock %}

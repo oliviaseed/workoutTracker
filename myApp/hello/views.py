@@ -1,23 +1,21 @@
 
-from django.http import HttpResponse
+#from django.http import HttpResponse
 from django.shortcuts import render
 import datetime
-from django.utils import timezone
+#from django.utils import timezone
 from django.shortcuts import redirect
-from hello.forms import LogMessageForm
 from hello.forms import entryForm
-from hello.models import LogMessage
 from hello.models import Workout, Exercise
 from django.views.generic import ListView
-from django.contrib.sessions.models import Session
-from django.contrib.sessions.backends.db import SessionStore
+#from django.contrib.sessions.models import Session
+#from django.contrib.sessions.backends.db import SessionStore
 
-class HomeListView(ListView):
-    """Renders the home page, with a list of all messages."""
-    model = LogMessage
+    
+class MyWorkoutView(ListView):
+    model = Exercise
 
     def get_context_data(self, **kwargs):
-        context = super(HomeListView, self).get_context_data(**kwargs)
+        context = super(MyWorkoutView, self).get_context_data(**kwargs)
         return context
     
 def about(request):
@@ -35,18 +33,6 @@ def hello_there(request, name):
             'date': datetime.now()
         }
     )
-
-def log_message(request):
-    form = LogMessageForm(request.POST or None)
-
-    if request.method == "POST":
-        if form.is_valid():
-            message = form.save(commit=False)
-            message.log_date = datetime.now()
-            message.save()
-            return redirect("home")
-    else:
-        return render(request, "hello/log_message.html", {"form": form})
     
 def logExercise(request):
     form = entryForm(request.POST or None)
@@ -77,5 +63,10 @@ def logExercise(request):
         else:
             return render(request, "hello/logExercise.html", {"form": form})
     else:
-        return render(request, "hello/logExercise.html", {"form": form})
+        exercise_list = MyWorkoutView.as_view(
+            queryset=Exercise.objects.filter(id=request.session["startTime"])[:5],  # :5 limits the results to the five most recent
+            context_object_name="exercise_list",
+            template_name="hello/history.html",
+        )
+        return render(request, "hello/logExercise.html", {"form": form,'table':exercise_list})
     

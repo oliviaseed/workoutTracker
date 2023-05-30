@@ -5,17 +5,6 @@ import datetime
 from datetime import timedelta
 #from django.utils.timezone import datetime
 
-class LogMessage(models.Model):
-    message = models.CharField(max_length=300)
-    log_date = models.DateTimeField("date logged")
-
-    def __str__(self):
-        """Returns a string representation of a message."""
-        date = timezone.localtime(self.log_date)
-        return f"'{self.message}' logged on {date.strftime('%A, %d %B, %Y at %X')}"
-    
-##mine
-
 class Workout(models.Model):
     id = models.CharField(primary_key=True, max_length=100, default=datetime.datetime.now().strftime("%H:%M:%S"))
     date = models.DateField(default=datetime.datetime.now().date())
@@ -90,7 +79,7 @@ class Exercise(models.Model):
     def __str__(self):
         """Returns a string representation of a message."""
         date = timezone.localtime(self.log_date)
-        return f"'{self.message}' logged on {date.strftime('%A, %d %B, %Y at %X')}"
+        return f"'{self.id}' created."
 
 class Note(models.Model):
    # _id = 0 
