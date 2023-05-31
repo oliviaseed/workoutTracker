@@ -15,7 +15,7 @@ class MyWorkoutView(ListView):
 def home(request):
     workout_list_view = Workout.objects.order_by("id")
     if request.method == "POST" and request.POST.get('details'):
-        return redirect('workout', request.POST.get('details'))
+        return redirect('specific_workout', request.POST.get('details'))
     else:
         print('rendering all workouts:',workout_list_view)
         return render(request,'hello/home.html',{'workout_list': workout_list_view})
@@ -53,7 +53,7 @@ def dynamic(request):
         if request.POST.get('workout'): 
             context['workout_form'] = None 
             Workout.objects.create().save()
-            return redirect('exercise')
+            return redirect('workout')
         elif request.POST.getlist('log'): 
             print('test')
             exercise_form = ExerciseForm(request.POST)
