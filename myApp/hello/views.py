@@ -13,7 +13,7 @@ class MyWorkoutView(ListView):
         return context
     
 def home(request):
-    workout_list_view = Workout.objects.order_by("id")
+    workout_list_view = Workout.objects.filter(status=True).order_by("id")
     if request.method == "POST" and request.POST.get('details'):
         return redirect('specific_workout', request.POST.get('details'))
     else:
