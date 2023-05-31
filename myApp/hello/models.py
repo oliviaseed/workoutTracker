@@ -8,23 +8,23 @@ from datetime import timedelta
 class Workout(models.Model):
     id = models.CharField(primary_key=True, max_length=100, default=datetime.datetime.now().strftime("%m/%d/%Y, %H:%M:%S"))
     date = models.DateField(default=datetime.datetime.now().date())
-    time_start = models.DateTimeField(default=datetime.datetime.now())
-    time_end = models.DateTimeField(default=datetime.datetime.now())
+    time_start = models.DateTimeField(default=timezone.make_aware(datetime.datetime.now()))
+    time_end = models.DateTimeField(default=timezone.make_aware(datetime.datetime.now()))
     length = models.DurationField(default=timedelta())
     status = models.BooleanField(default=False)
     print(f'INSTANTIATED Workout at {datetime.datetime.now().strftime("%m/%d/%Y, %H:%M:%S")}')
 
     def create(self):
-        self.time_start = datetime.datetime.now()
+        self.time_start = timezone.make_aware(datetime.datetime.now())
         self.date = self.time_start.date()
         self.id = self.time_start.strftime("%m/%d/%Y, %H:%M:%S")
         print(f'Initited Workout with id:{self.id}')
     
     def endWorkout(self):
-        self.time_end = timezone.make_aware(datetime.datetime.now() )#NAIVE!
+        self.time_end = timezone.make_aware(datetime.datetime.now())#NAIVE!
         self.length = self.time_end-self.time_start
         self.status=True
-        print(f'Ended Workout.')
+        print(f'Ended Workout at {self.time_end}.')
         return self
 
 class Set(models.Model):

@@ -19,8 +19,8 @@
             {% for workout in workout_list %}
                 <tr>
                     <td>{{ workout.date | date }}</td>
-                    <td>{{ workout.time_start | time:'H:i:s' }}</td>
-                    <td>{{ workout.time_end | time:'H:i:s' }}</td>
+                    <td>{{ workout.time_start | time }}</td>
+                    <td>{{ workout.time_end | time }}</td>
                     <td>{{ workout.length }}</td>
                 </tr>
             {% endfor %}
