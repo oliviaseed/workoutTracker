@@ -10,7 +10,7 @@ class Workout(models.Model):
     date = models.DateField(default=datetime.datetime.now().date())
     time_start = models.DateTimeField(default=timezone.make_aware(datetime.datetime.now()))
     time_end = models.DateTimeField(default=timezone.make_aware(datetime.datetime.now()))
-    length = models.DurationField(default=timedelta())
+    length = models.FloatField(default=0)
     status = models.BooleanField(default=False)
     print(f'INSTANTIATED Workout at {datetime.datetime.now().strftime("%m/%d/%Y, %H:%M:%S")}')
 
@@ -22,9 +22,9 @@ class Workout(models.Model):
     
     def endWorkout(self):
         self.time_end = timezone.make_aware(datetime.datetime.now())#NAIVE!
-        self.length = self.time_end-self.time_start
+        self.length = (self.time_end-self.time_start).total_seconds() 
         self.status=True
-        print(f'Ended Workout at {self.time_end}.')
+        print(f'Ended Workout at {self.time_end} of length {self.length}s.')
         return self
 
 class Set(models.Model):
