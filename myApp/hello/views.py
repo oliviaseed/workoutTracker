@@ -12,6 +12,14 @@ class MyWorkoutView(ListView):
         context = super(MyWorkoutView, self).get_context_data(**kwargs)
         return context
     
+def home(request):
+    workout_list_view = Workout.objects.order_by("id")
+    if request.method == "POST" and request.POST.get('details'):
+        return redirect('workout', request.POST.get('details'))
+    else:
+        print('rendering all workouts:',workout_list_view)
+        return render(request,'hello/home.html',{'workout_list': workout_list_view})
+
 def getWorkout(request, id):
     print(f'Requesting workout with id:{id}')
     exercise_list_view = Exercise.objects.filter(workout_id=id)

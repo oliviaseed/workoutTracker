@@ -14,6 +14,7 @@
                 <th>End Time</th>
                 <th>Length</th>
                 <th>ID</th>
+                <th></th>
             </tr>
             </thead>
             <tbody>
@@ -24,6 +25,12 @@
                     <td>{{ workout.time_end | time }}</td>
                     <td>{{ workout.length }}</td>
                     <td>{{ workout.id }}</td>
+                    <td>
+                        <form method="POST" class="log-form" enctype= multipart/form-data>
+                            {% csrf_token %}
+                            <button type="submit" class="save btn btn-default" name="details" value="{{ workout.id }}">Details</button>
+                        </form>
+                    </td>
                 </tr>
             {% endfor %}
             </tbody>
