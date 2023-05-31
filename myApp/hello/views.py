@@ -12,6 +12,18 @@ class MyWorkoutView(ListView):
         context = super(MyWorkoutView, self).get_context_data(**kwargs)
         return context
     
+def getWorkout(request, id):
+    print(f'Requesting workout with id:{id}')
+    exercise_list_view = Exercise.objects.filter(workout_id=id)
+    print(f'exercise_list_view:{exercise_list_view}')
+    return render(
+        request,
+        'hello/history.html',
+        {
+            'exercise_list': exercise_list_view
+        }
+    )
+
 def dynamic(request):
     context = {}
     workout = Workout.objects.filter(status=False).last()

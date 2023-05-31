@@ -10,7 +10,7 @@
         <table class="exercise_list">
             <thead>
             <tr>
-                <th>Workout</th>
+                <th>Workout ID</th>
                 <th>Name</th>
                 <th>Reps</th>
                 <th>Details</th>
@@ -19,7 +19,7 @@
             <tbody>
             {% for exercise in exercise_list %}
                 <tr>
-                    <td>{{ exercise.id }}</td>
+                    <td>{{ exercise.workout_id }}</td>
                     <td>{{ exercise.get_exercise_display }}</td>
                     <td>{{ exercise.reps }}</td>
                     <td>{{ exercise.details }}</td>
@@ -29,6 +29,6 @@
             </tbody>
         </table>
     {% else %}
-        <p>No exercises have been logged. Use the <a href="{% url 'exercise' %}">Log workout form</a>.</p>
+        <p> No logged exercises.</p>
     {% endif %}
 {% endblock %}

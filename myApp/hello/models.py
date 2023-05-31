@@ -4,7 +4,7 @@ from django.utils import timezone
 import datetime
 
 class Workout(models.Model):
-    id = models.CharField(primary_key=True, max_length=100, default=datetime.datetime.now().strftime("%m/%d/%Y, %H:%M:%S"))
+    id = models.CharField(primary_key=True, max_length=100, default=datetime.datetime.now().strftime("%d%m%Y_%H:%M:%S"))
     date = models.DateField(default=datetime.datetime.now().date())
     time_start = models.DateTimeField(default=timezone.make_aware(datetime.datetime.now()))
     time_end = models.DateTimeField(default=timezone.make_aware(datetime.datetime.now()))
@@ -70,5 +70,5 @@ class Exercise(models.Model):
     details = models.CharField(max_length=10, default='')
 
 class Note(models.Model):
-    exercise = models.CharField(max_length=30, choices=EXERCISE_CATEGORIES) 
-    note = models.CharField(max_length=500)
+    exercise = models.CharField(max_length=30, choices=EXERCISE_CATEGORIES, default='') 
+    note = models.CharField(max_length=500, default='')

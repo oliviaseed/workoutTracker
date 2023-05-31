@@ -13,6 +13,7 @@
                 <th>Start Time</th>
                 <th>End Time</th>
                 <th>Length</th>
+                <th>ID</th>
             </tr>
             </thead>
             <tbody>
@@ -22,6 +23,7 @@
                     <td>{{ workout.time_start | time }}</td>
                     <td>{{ workout.time_end | time }}</td>
                     <td>{{ workout.length }}</td>
+                    <td>{{ workout.id }}</td>
                 </tr>
             {% endfor %}
             </tbody>
