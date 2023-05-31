@@ -2,8 +2,6 @@ from typing import Any
 from django.db import models
 from django.utils import timezone
 import datetime
-from datetime import timedelta
-#from django.utils.timezone import datetime
 
 class Workout(models.Model):
     id = models.CharField(primary_key=True, max_length=100, default=datetime.datetime.now().strftime("%m/%d/%Y, %H:%M:%S"))
@@ -27,20 +25,7 @@ class Workout(models.Model):
         print(f'Ended Workout at {self.time_end} of length {self.length}s.')
         return self
 
-class Set(models.Model):
-    _id = models.IntegerField() #chronological (set 1, 2, ...)
-    type = models.CharField(max_length=300, choices=[('wa', 'warmup'),('wo', 'working')]) 
-    reps = models.IntegerField()
-    UNIT_OPTIONS = [('kg', 'kg'),('lb','lb'),('s','seconds'),('min', 'minutes')]
-    specs = models.CharField(max_length=3, choices=UNIT_OPTIONS) 
-
-class Exercise(models.Model):
-    workout_id = models.CharField(unique=False, max_length=100, default=datetime.datetime.now().strftime("%m/%d/%Y, %H:%M:%S"))
-    
-    def create(self):
-        self.workout_id=datetime.datetime.now().strftime("%m/%d/%Y, %H:%M:%S")
-    
-    EXERCISE_CATEGORIES = [
+EXERCISE_CATEGORIES = [
     ('legs', (
         ('ht', 'hip thrust'),
         ('kas', 'kas glute bridge'),
@@ -69,6 +54,13 @@ class Exercise(models.Model):
         ('bi', 'bike'),
         ('st', 'stair master'),
     )),]
+
+class Exercise(models.Model):
+    workout_id = models.CharField(unique=False, max_length=100, default=datetime.datetime.now().strftime("%m/%d/%Y, %H:%M:%S"))
+    
+    def create(self):
+        self.workout_id=datetime.datetime.now().strftime("%m/%d/%Y, %H:%M:%S")
+    
     exercise = models.CharField(max_length=30, choices=EXERCISE_CATEGORIES) 
 
     reps = models.IntegerField(default='10')
@@ -77,12 +69,6 @@ class Exercise(models.Model):
     specs = models.CharField(max_length=3, choices=UNIT_OPTIONS, default=('kg', 'kg')) 
     details = models.CharField(max_length=10, default='')
 
-    # def __str__(self):
-    #     """Returns a string representation of a message."""
-    #     date = timezone.localtime(self.log_date)
-    #     return f"'{self.id}' created."
-
 class Note(models.Model):
-   # _id = 0 
-    exercise = models.CharField(max_length=300)
-    note = []
+    exercise = models.CharField(max_length=30, choices=EXERCISE_CATEGORIES) 
+    note = models.CharField(max_length=500)

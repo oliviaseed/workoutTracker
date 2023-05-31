@@ -17,10 +17,6 @@ exercise_list_view = views.MyWorkoutView.as_view(
 urlpatterns = [
     path("", workout_list_view, name="home"),
     path("history", exercise_list_view, name="history"),
-    path("hello/<name>", views.hello_there, name="hello_there"),
-    path("about/", views.about, name="about"),
-    path("contact/", views.contact, name="contact"),
     path("exercise/", views.dynamic, name="exercise"),
-
 ]
 
