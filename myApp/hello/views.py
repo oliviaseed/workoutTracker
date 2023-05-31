@@ -82,37 +82,33 @@ def logExercise(request):
 def dynamic(request):
     context = {}
     workout = Workout.objects.filter(status=False).last()
-    print(f'workout:{workout}')
 
-    if (request.method == "GET") and workout == None:
-        context['workout_form'] = WorkoutForm() 
-        print('context:',context)
-    elif (request.method == "POST") and request.POST.get('workout') != None: 
-        # initiate workout 
-        context['workout_form'] = None
-        workout = Workout.objects.create()
-        workout.save() #save to database
-        context['exercise_form'] = ExerciseForm(request.POST)
-        print('context:',context)
-    elif (request.method == "GET") and workout: #workout in prog
-        exerciseList = Exercise.objects.filter(workout_id=workout.id)
-        context['exercise_list'] = exerciseList
-        exercise_form = ExerciseForm()
-        context['exercise_form'] = exercise_form
-        print('context:',context)
-    elif request.method == "POST" and request.POST.getlist('log'): 
-        exercise_form = ExerciseForm(request.POST or None)
-        print(f'validity: {exercise_form.is_valid():}')
-        if exercise_form.is_valid():
-            exercise = exercise_form.save(commit=False)
-            exercise.workout_id = workout.id
-            exercise.details = str(exercise.val)+exercise.specs
-            exercise.save()
-        exerciseList = Exercise.objects.filter(workout_id=workout.id)
-        context['exercise_list'] = exerciseList #could be None teehee
-        context['exercise_form'] = ExerciseForm()
-        print(f'context:{context}')
-    elif request.method == "POST" and request.POST.getlist('end'):
-        Workout.objects.filter(status=False).last().endWorkout().save()
+    if (request.method == "GET" or "POST"):
+        if Workout.objects.filter(status=False).last() == None:
+            context['workout_form'] = WorkoutForm() 
+        else:
+            context['exercise_list'] = Exercise.objects.filter(workout_id=workout.id)
+            if Exercise.objects.filter(workout_id=workout.id):
+                context['exercise_form'] = ExerciseForm(instance=Exercise.objects.filter(workout_id=workout.id).last())
+            else: context['exercise_form'] = ExerciseForm()
+    
+    if (request.method == "POST"):
+        print(f'request.POST:{request.POST}')
+        if request.POST.get('workout'): 
+            context['workout_form'] = None 
+            Workout.objects.create().save()
+            return redirect('exercise')
+        elif request.POST.getlist('log'): 
+            print('test')
+            exercise_form = ExerciseForm(request.POST)
+            if exercise_form.is_valid():
+                exercise = exercise_form.save(commit=False)
+                exercise.workout_id = workout.id
+                exercise.details = str(exercise.val)+exercise.specs
+                exercise.save()
+            context['exercise_form'] = exercise_form
+        elif request.POST.getlist('end'):
+            Workout.objects.filter(status=False).last().endWorkout().save()
+            return redirect('home')
     else: print('lol F')
     return render(request, "hello/logExercise.html", context)
