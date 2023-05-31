@@ -20,7 +20,7 @@ urlpatterns = [
     path("hello/<name>", views.hello_there, name="hello_there"),
     path("about/", views.about, name="about"),
     path("contact/", views.contact, name="contact"),
-    path("exercise/", views.logExercise, name="exercise"),
+    path("exercise/", views.dynamic, name="exercise"),
 
 ]
 

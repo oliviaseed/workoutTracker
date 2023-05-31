@@ -7,3 +7,11 @@ email: olivia2193249@gmail.com
 pass: 232323
 
 Crispy forms: https://django-crispy-forms.readthedocs.io/en/latest/
+
+
+UI PLAN-
+
+Mass log (dynamic form):
+- 'Add exercise' button
+- toggles new exercise
+- 'add set' button for respective exercises (autofill exercise and editable reps/specs)

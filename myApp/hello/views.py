@@ -4,7 +4,7 @@ from django.shortcuts import render
 import datetime
 #from django.utils import timezone
 from django.shortcuts import redirect
-from hello.forms import entryForm
+from hello.forms import entryForm, WorkoutForm, ExerciseForm
 from hello.models import Workout, Exercise
 from django.views.generic import ListView
 #from django.contrib.sessions.models import Session
@@ -79,3 +79,40 @@ def logExercise(request):
     else:
         return render(request, "hello/logExercise.html", {"form": form,'exercise_list':exercise_list})
     
+def dynamic(request):
+    context = {}
+    workout = Workout.objects.filter(status=False).last()
+    print(f'workout:{workout}')
+
+    if (request.method == "GET") and workout == None:
+        context['workout_form'] = WorkoutForm() 
+        print('context:',context)
+    elif (request.method == "POST") and request.POST.get('workout') != None: 
+        # initiate workout 
+        context['workout_form'] = None
+        workout = Workout.objects.create()
+        workout.save() #save to database
+        context['exercise_form'] = ExerciseForm(request.POST)
+        print('context:',context)
+    elif (request.method == "GET") and workout: #workout in prog
+        exerciseList = Exercise.objects.filter(workout_id=workout.id)
+        context['exercise_list'] = exerciseList
+        exercise_form = ExerciseForm()
+        context['exercise_form'] = exercise_form
+        print('context:',context)
+    elif request.method == "POST" and request.POST.getlist('log'): 
+        exercise_form = ExerciseForm(request.POST or None)
+        print(f'validity: {exercise_form.is_valid():}')
+        if exercise_form.is_valid():
+            exercise = exercise_form.save(commit=False)
+            exercise.workout_id = workout.id
+            exercise.details = str(exercise.val)+exercise.specs
+            exercise.save()
+        exerciseList = Exercise.objects.filter(workout_id=workout.id)
+        context['exercise_list'] = exerciseList #could be None teehee
+        context['exercise_form'] = ExerciseForm()
+        print(f'context:{context}')
+    elif request.method == "POST" and request.POST.getlist('end'):
+        Workout.objects.filter(status=False).last().endWorkout().save()
+    else: print('lol F')
+    return render(request, "hello/logExercise.html", context)

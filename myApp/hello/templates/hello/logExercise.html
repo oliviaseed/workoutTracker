@@ -1,46 +1,55 @@
 {% extends "hello/layout.html" %}
 <link href="path/to/file/uni-form.css" media="all" rel="stylesheet"/>
 <link href="path/to/file/default.uni-form.css" media="all" rel="stylesheet"/>
-
 {% load crispy_forms_tags %}
-{% block title %}
-    Log --
-{% endblock %}
+
+{% block title %} WERK TIME -- {% endblock %}
+
 {% block content %}
-    <form method="POST" class="log-form">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit" class="save btn btn-default" name="log">Log</button>
-    </form>
-    <form method="POST" class="log-form">
-        {% csrf_token %}
-        <button type="submit" class="save btn btn-default" name="end">End Workout</button>
-    </form>
 
-    <h2>Current Workout</h2>
-    {% if exercise_list %}
-        <table class="exercise_list">
-            <thead>
-            <tr>
-                <th>Workout</th>
-                <th>Name</th>
-                <th>Reps</th>
-                <th>Details</th>
-            </tr>
-            </thead>
-            <tbody>
-            {% for exercise in exercise_list %}
-                <tr>
-                    <td>{{ exercise.id }}</td>
-                    <td>{{ exercise.get_exercise_display }}</td>
-                    <td>{{ exercise.reps }}</td>
-                    <td>{{ exercise.details }}</td>
+{% if workout_form %}
+<form method="POST" class="workout_form" enctype= multipart/form-data>
+    {% csrf_token %}
+    {{ form.as_p }}
+<button type="submit" class="save btn btn-default" name="workout" value="workout">Start Workout</button>
+</form>
 
-                </tr>
-            {% endfor %}
-            </tbody>
-        </table>
-    {% else %}
-        <p>No exercises have been logged yet for this workout.</a></p>
-    {% endif %}
+<p>No exercises have been logged yet for this workout.</a></p>
+{% endif %}
+
+{% if exercise_form %}
+<form method="POST" class="log-form" enctype= multipart/form-data>
+    {% csrf_token %}
+    {{ exercise_form.as_p }}
+    <button type="submit" class="save btn btn-default" name="log">Log Rep</button>
+</form>
+<form method="POST" class="log-form" enctype= multipart/form-data>
+    {% csrf_token %}
+    <button type="submit" class="save btn btn-default" name="end">End Workout</button>
+</form>
+{% endif %}
+
+{% if exercise_form %}
+<h2>Current Workout</h2>
+<table class="exercise_form">
+    <thead>
+    <tr>
+        <th>Name</th>
+        <th>Reps</th>
+        <th>Details</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for exercise in exercise_list %}
+        <tr>
+            <td>{{ exercise.get_exercise_display }}</td>
+            <td>{{ exercise.reps }}</td>
+            <td>{{ exercise.details }}</td>
+
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+{% endif %}
+
 {% endblock %}

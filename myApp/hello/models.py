@@ -11,6 +11,7 @@ class Workout(models.Model):
     time_start = models.DateTimeField(default=datetime.datetime.now())
     time_end = models.DateTimeField(default=datetime.datetime.now())
     length = models.DurationField(default=timedelta())
+    status = models.BooleanField(default=False)
     print(f'INSTANTIATED Workout at {datetime.datetime.now().strftime("%m/%d/%Y, %H:%M:%S")}')
 
     def create(self):
@@ -22,6 +23,7 @@ class Workout(models.Model):
     def endWorkout(self):
         self.time_end = timezone.make_aware(datetime.datetime.now() )#NAIVE!
         self.length = self.time_end-self.time_start
+        self.status=True
         print(f'Ended Workout.')
         return self
 
@@ -67,7 +69,7 @@ class Exercise(models.Model):
         ('bi', 'bike'),
         ('st', 'stair master'),
     )),]
-    exercise = models.CharField(max_length=3, choices=EXERCISE_CATEGORIES) 
+    exercise = models.CharField(max_length=30, choices=EXERCISE_CATEGORIES) 
 
     reps = models.IntegerField(default='10')
     val = models.IntegerField(default='0')
