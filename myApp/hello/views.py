@@ -60,8 +60,19 @@ def dynamic(request):
             if exercise_form.is_valid():
                 exercise = exercise_form.save(commit=False)
                 exercise.workout_id = workout.id
-                exercise.details = str(exercise.val)+''+exercise.specs
-                exercise.save()
+                exercise.details = str(exercise.val)+' '+exercise.specs
+                print(f'exercise:{exercise}')
+                existing = Exercise.objects.filter(workout_id=workout.id,exercise=exercise.exercise, details=exercise.details).last()
+                print(f'existing:{existing}')
+                if existing: 
+                    print('existing.sets:',existing.sets)
+                    existing.sets += 1     
+                    existing.save()               
+                else:
+                    exercise = exercise_form.save(commit=False)
+                    exercise.workout_id = workout.id
+                    exercise.details = str(exercise.val)+' '+exercise.specs
+                    exercise.save()
             context['exercise_form'] = exercise_form
         elif request.POST.getlist('end'):
             Workout.objects.filter(status=False).last().endWorkout().save()

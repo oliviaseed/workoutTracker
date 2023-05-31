@@ -62,7 +62,7 @@ class Exercise(models.Model):
         self.workout_id=datetime.datetime.now().strftime("%m/%d/%Y, %H:%M:%S")
     
     exercise = models.CharField(max_length=30, choices=EXERCISE_CATEGORIES) 
-
+    sets = models.IntegerField(default='1')
     reps = models.IntegerField(default='10')
     val = models.IntegerField(default='0')
     UNIT_OPTIONS = [('kg', 'kg'),('lb','lb'),('s','seconds'),('min', 'minutes')]

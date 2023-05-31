@@ -14,7 +14,6 @@
 <button type="submit" class="save btn btn-default" name="workout" value="workout">Start Workout</button>
 </form>
 
-<p>No exercises have been logged yet for this workout.</a></p>
 {% endif %}
 
 {% if exercise_form %}
@@ -35,6 +34,7 @@
     <thead>
     <tr>
         <th>Name</th>
+        <th>Sets</th>
         <th>Reps</th>
         <th>Details</th>
     </tr>
@@ -43,6 +43,7 @@
     {% for exercise in exercise_list %}
         <tr>
             <td>{{ exercise.get_exercise_display }}</td>
+            <td>{{ exercise.sets }}</td>
             <td>{{ exercise.reps }}</td>
             <td>{{ exercise.details }}</td>
 
