@@ -1,7 +1,7 @@
 
 #from django.http import HttpResponse
 from django.shortcuts import render, redirect
-from hello.forms import WorkoutForm, ExerciseForm
+from hello.forms import WorkoutForm, ExerciseForm, FilterForm
 from hello.models import Workout, Exercise
 from django.views.generic import ListView
 
@@ -20,17 +20,20 @@ def home(request):
         print('rendering all workouts:',workout_list_view)
         return render(request,'hello/home.html',{'workout_list': workout_list_view})
 
+def history(request):
+    exercise_list_view = Exercise.objects.order_by("workout_id") #most recent first
+    if request.method == "POST":
+        if request.POST.get('exercise') != (None or ''):
+            filter = request.POST.getlist('exercise')
+            exercise_list_view = Exercise.objects.filter(exercise=filter[0]).order_by("workout_id")
+
+    return render(request,'hello/history.html',{'exercise_list': exercise_list_view, 'filter_form': FilterForm()})
+
 def getWorkout(request, id):
     print(f'Requesting workout with id:{id}')
     exercise_list_view = Exercise.objects.filter(workout_id=id)
     print(f'exercise_list_view:{exercise_list_view}')
-    return render(
-        request,
-        'hello/history.html',
-        {
-            'exercise_list': exercise_list_view
-        }
-    )
+    return render(request,'hello/history.html',{'exercise_list': exercise_list_view})
 
 def dynamic(request):
     context = {}
@@ -57,7 +60,7 @@ def dynamic(request):
             if exercise_form.is_valid():
                 exercise = exercise_form.save(commit=False)
                 exercise.workout_id = workout.id
-                exercise.details = str(exercise.val)+exercise.specs
+                exercise.details = str(exercise.val)+''+exercise.specs
                 exercise.save()
             context['exercise_form'] = exercise_form
         elif request.POST.getlist('end'):

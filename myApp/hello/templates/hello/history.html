@@ -4,8 +4,16 @@
 {% endblock %}
 
 {% block content %}
-    <h2>Logged Exercises</h2>
+    <h2>All Logged Exercises</h2>
 
+    {% if filter_form %}
+    <form method="POST" class="log-form" enctype= multipart/form-data>
+        {% csrf_token %}
+        {{ filter_form.as_p }}
+        <button type="submit" class="save btn btn-default" name="filter">Filter</button>
+    </form>
+    {% endif %}
+    
     {% if exercise_list %}
         <table class="exercise_list">
             <thead>
