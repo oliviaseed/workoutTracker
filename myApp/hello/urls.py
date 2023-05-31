@@ -9,7 +9,7 @@ workout_list_view = views.MyWorkoutView.as_view(
 )
 
 exercise_list_view = views.MyWorkoutView.as_view(
-    queryset=Exercise.objects.order_by("id")[:5],  # :5 limits the results to the five most recent
+    queryset=Exercise.objects.order_by("id"),  # :5 limits the results to the five most recent
     context_object_name="exercise_list",
     template_name="hello/history.html",
 )
